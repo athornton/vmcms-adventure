@@ -1,0 +1,61 @@
+GETFL     TITLE 'PLI CALLABLE ROUTINE TO RESTORE CONTENTS OF ARRAYS'    GET00010
+*                                                                       GET00020
+*                                                                       GET00030
+*                                                                     * GET00040
+* CALLING SEQUENCE:                                                   * GET00050
+*                                                                     * GET00060
+* GETFL (FILENAME, FILETYPE, FILEMODE,              CHAR(8)           * GET00070
+*         ARRAY1, LENGTH_ARRAY1,                                      * GET00080
+*         ARRAY2, LENGTH_ARRAY2,                                      * GET00090
+*         ARRAY3, LENGTH_ARRAY3,                                      * GET00100
+*         ARRAY4, LENGTH_ARRAY4,                                      * GET00110
+*         ARRAY5, LENGTH_ARRAY5,                                      * GET00120
+*         ARRAY6, LENGTH_ARRAY6,                                      * GET00130
+*         ARRAY7, LENGTH_ARRAY7,                                      * GET00140
+*         ARRAY8, LENGTH_ARRAY8,                                      * GET00150
+*                               RTN_CODE)                             * GET00160
+*   RETURN CODES:    0   IF  ALL OK                                   * GET00170
+*                    1   IF FILE DOESN'T EXIST                        * GET00180
+*                 2-26   FROM FSREAD  MACRO                           * GET00190
+*                    6   FROM FSCLOSE                                 * GET00200
+GETFL    CSECT ,                                                        GET00210
+         SAVE  (14,12),,*                                               GET00220
+         LR    R12,R15                                                  GET00230
+         USING GETFL,R12                                                GET00240
+*********************************************************************** GET00250
+         LR    R11,R1              SAVE INPUT PARM PTR                  GET00260
+*    ADDRESS THE INPUT FILE FSCB                                        GET00270
+         LA    R10,INFSCB                                               GET00280
+         USING FSCBD,R10                                                GET00290
+*    MOVE IN INPUT FILENAME, FILETYPE AND FILEMODE                      GET00300
+         L     R2,0(,R11)           R2 -> FILENAME                      GET00310
+         MVC   FSCBFN,0(R2)                                             GET00320
+*                                                                       GET00330
+         L     R2,4(,R11)           R2 -> FILETYPE                      GET00340
+         MVC   FSCBFT,0(R2)                                             GET00350
+*                                                                       GET00360
+         L     R2,8(,R11)           R2 -> FILEMODE                      GET00370
+         MVC   FSCBFM(2),0(R2)                                          GET00380
+* FIRST GOTTA CHECK FILE EXISTS AND DO FILL IN                          GET00390
+         FSSTATE  FSCB=INFSCB,ERROR=FINISH                              GET00400
+* GET HERE IF FILE EXISTS                                               GET00410
+*                                                                       GET00420
+         LA    R5,8                                                     GET00430
+         XR    R4,R4                                                    GET00440
+LOOP     L     R2,12(R4,R11)        POINTER TO ARRAY                    GET00450
+         L     R3,16(R4,R11)        POINTER TO ARRAY LENGTH             GET00460
+         L     R3,0(,R3)            R3 CONTAINS ARRAY LENGTH            GET00470
+         FSREAD  FSCB=INFSCB,BUFFER=(R2),BSIZE=(R3),ERROR=FINISH        GET00480
+*                                                                       GET00490
+         AH    R4,=H'8'                                                 GET00500
+         BCT   R5,LOOP                                                  GET00510
+         FSCLOSE FSCB=INFSCB,ERROR=FINISH                               GET00520
+         XR    R15,R15                                                  GET00530
+FINISH   L     R2,76(,R11)                                              GET00540
+         ST    R15,0(,R2)                                               GET00550
+         RETURN (14,12),RC=0                                            GET00560
+INFSCB   FSCB  'SAVEFL SAVEFL A',RECFM=V                                GET00570
+         LTORG                                                          GET00580
+         REGEQU                                                         GET00590
+         FSCBD                                                          GET00600
+         END                                                            GET00610
