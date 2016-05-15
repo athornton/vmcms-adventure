@@ -11,17 +11,19 @@ Adam Thornton, 15 May 2016
 ## VMARC
 
 The VMARC file was unpacked with Leland Lucius's VMA.
+( http://www.homerow.net/zvm/vma/ ) -- unfortunately, source downloads
+get a 500 error right now.
 
 ## Conversion
 
-ASCII-dd contains the results of EBCDIC-ASCII conversion with "dd", and
-ASCII-iconv contains the results of EBCDIC-ASCII conversion with
-"iconv", using EBCDIC-INT as the character set and using -c to skip
-untranslatable characters.  You will notice this breaks the formatting
-of the cave data (the first broken character appears to be a square
-bracket from the "[sic]" after "fee fie foe foo").  The "text", and
-"txtlib" files are assembler output anyway, so don't worry that they are
-gibberish.
+The ASCII subdirectory contains the results of unpacking with ```vma
+-a```.
+
+EBCDIC is the native unpacking.
+
+You can try this with iconv or dd, but the record length is tricky and
+everything ends up on one big line unless you're really careful.  Using
+```vma``` is a lot easier.
 
 ## Compilation
 
