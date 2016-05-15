@@ -1,5 +1,13 @@
 # Colossal Cave for VM/CMS
 
+Important note: I didn't write this port of Colossal Cave.  I don't know
+who did.  My only role here was rescuing it from the Internet Archive,
+since it's no longer hosted at ua.edu, and then running it through some
+converters to get files in a form that people without VM/CMS can easily
+use.
+
+Adam Thornton, 15 May 2016
+
 ## VMARC
 
 The VMARC file was unpacked with Leland Lucius's VMA.
