@@ -11,8 +11,7 @@ Adam Thornton, 15 May 2016
 ## VMARC
 
 The VMARC file was unpacked with Leland Lucius's VMA.
-( http://www.homerow.net/zvm/vma/ ) -- unfortunately, source downloads
-get a 500 error right now.
+( http://www.homerow.net/zvm/vma/ )
 
 ## Conversion
 
